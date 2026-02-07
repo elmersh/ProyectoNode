@@ -30,8 +30,28 @@ const config = {
 let pool = null;
 
 async function getPool() {
+  // Si el pool existe pero se desconectó, limpiarlo para reconectar
+  if (pool && !pool.connected) {
+    pool = null;
+  }
+
   if (!pool) {
-    pool = await sql.connect(config);
+    // Reintentos para cuando Azure SQL serverless está en pausa
+    const maxRetries = 3;
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        pool = await sql.connect(config);
+        return pool;
+      } catch (err) {
+        console.log(`Intento ${i + 1}/${maxRetries} de conexión falló: ${err.message}`);
+        pool = null;
+        if (i < maxRetries - 1) {
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        } else {
+          throw err;
+        }
+      }
+    }
   }
   return pool;
 }
