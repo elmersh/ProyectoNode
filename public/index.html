@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SecureFeedback S.A. - Registro de Usuarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .logo-text span {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--success-light);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.2);
+            padding: 4px;
+            border-radius: var(--radius);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header i {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* ===== FORM ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 11px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--gray-800);
+            transition: all 0.2s ease;
+            outline: none;
+            background: var(--gray-50);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-group input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .form-group .error-text {
+            font-size: 0.75rem;
+            color: var(--danger);
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-group.has-error input {
+            border-color: var(--danger);
+        }
+
+        .form-group.has-error .error-text {
+            display: block;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: var(--danger-light);
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* ===== TABLE ===== */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: var(--gray-50);
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .data-table tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .email-cell {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .date-cell {
+            color: var(--gray-500);
+            font-size: 0.82rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .badge-id {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-400);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .empty-state small {
+            font-size: 0.82rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .stat-chip {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: 2px solid var(--gray-200);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .refresh-btn.spinning i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== SECURITY INFO ===== */
+        .security-info {
+            background: linear-gradient(135deg, #f0f9ff, #eff6ff);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .security-info h3 {
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .security-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: var(--gray-600);
+        }
+
+        .security-feature i {
+            color: var(--success);
+            font-size: 0.85rem;
+        }
+
+        /* ===== LOADING ===== */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease infinite;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .main {
+                padding: 1rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-body {
+                padding: 1.2rem;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .security-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>SecureFeedback S.A.</h1>
+                    <span>Sistema de Registro Seguro</span>
+                </div>
+            </div>
+            <div class="security-badge">
+                <i class="fas fa-lock"></i>
+                Protegido por WAF + OWASP
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('register')" id="tab-register">
+                <i class="fas fa-user-plus"></i>
+                Registrar Usuario
+            </button>
+            <button class="tab" onclick="showSection('users')" id="tab-users">
+                <i class="fas fa-users"></i>
+                Usuarios Registrados
+            </button>
+        </div>
+
+        <!-- REGISTER SECTION -->
+        <div id="section-register">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <h2>Nuevo Registro</h2>
+                        <p>Complete el formulario para registrar un nuevo usuario</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Alerts -->
+                    <div id="alert-success" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="success-message"></span>
+                    </div>
+                    <div id="alert-error" class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="error-message"></span>
+                    </div>
+
+                    <form id="registerForm" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nombre <span class="required">*</span></label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Carlos" maxlength="100" required>
+                                <span class="error-text">Ingrese un nombre válido (solo letras, mín. 2 caracteres)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido <span class="required">*</span></label>
+                                <input type="text" id="apellido" name="apellido" placeholder="Ej: Pérez López" maxlength="100" required>
+                                <span class="error-text">Ingrese un apellido válido (solo letras, mín. 2 caracteres)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Correo Electrónico <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" maxlength="255" required>
+                                <span class="error-text">Ingrese un correo electrónico válido</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono" placeholder="+503 7000-0000" maxlength="20">
+                                <span class="error-text">Ingrese un número de teléfono válido</span>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>País</label>
+                                <select id="pais" name="pais">
+                                    <option value="">Seleccione un país</option>
+                                    <option value="El Salvador">El Salvador</option>
+                                    <option value="Guatemala">Guatemala</option>
+                                    <option value="Honduras">Honduras</option>
+                                    <option value="Nicaragua">Nicaragua</option>
+                                    <option value="Costa Rica">Costa Rica</option>
+                                    <option value="Panamá">Panamá</option>
+                                    <option value="México">México</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Estados Unidos">Estados Unidos</option>
+                                    <option value="España">España</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Registrar Usuario
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="security-info">
+                <h3><i class="fas fa-shield-halved"></i> Controles de Seguridad Implementados</h3>
+                <div class="security-features">
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Validación y sanitización de entradas
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Protección contra SQL Injection
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Protección contra XSS
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        WAF con reglas OWASP Top 10
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Credenciales en variables de entorno
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Consultas parametrizadas
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Headers de seguridad (Helmet)
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-check-circle"></i>
+                        Conexión cifrada TLS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- USERS LIST SECTION -->
+        <div id="section-users" class="hidden">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h2>Usuarios Registrados</h2>
+                        <p>Listado de todos los usuarios en la base de datos</p>
+                    </div>
+                    <div class="stats-bar">
+                        <span class="stat-chip" id="user-count">0 usuarios</span>
+                        <button class="refresh-btn" onclick="loadUsers()" title="Actualizar">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Teléfono</th>
+                                    <th>País</th>
+                                    <th>Fecha de Registro</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="empty-state hidden">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay usuarios registrados</p>
+                        <small>Los usuarios registrados aparecerán aquí</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ===== NAVEGACIÓN POR TABS =====
+        function showSection(section) {
+            document.getElementById('section-register').classList.toggle('hidden', section !== 'register');
+            document.getElementById('section-users').classList.toggle('hidden', section !== 'users');
+            document.getElementById('tab-register').classList.toggle('active', section === 'register');
+            document.getElementById('tab-users').classList.toggle('active', section === 'users');
+
+            if (section === 'users') {
+                loadUsers();
+            }
+        }
+
+        // ===== VALIDACIÓN DEL LADO DEL CLIENTE =====
+        function sanitizeInput(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{2,100}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[\d\s\-\+\(\)]{7,20}$/;
+
+            // Validar nombre
+            const nombre = document.getElementById('nombre');
+            if (!nameRegex.test(nombre.value.trim())) {
+                nombre.parentElement.classList.add('has-error');
+                isValid = false;
+            } else {
+                nombre.parentElement.classList.remove('has-error');
+            }
+
+            // Validar apellido
+            const apellido = document.getElementById('apellido');
+            if (!nameRegex.test(apellido.value.trim())) {
+                apellido.parentElement.classList.add('has-error');
+                isValid = false;
+            } else {
+                apellido.parentElement.classList.remove('has-error');
+            }
+
+            // Validar email
+            const email = document.getElementById('email');
+            if (!emailRegex.test(email.value.trim())) {
+                email.parentElement.classList.add('has-error');
+                isValid = false;
+            } else {
+                email.parentElement.classList.remove('has-error');
+            }
+
+            // Validar teléfono (opcional)
+            const telefono = document.getElementById('telefono');
+            if (telefono.value.trim() && !phoneRegex.test(telefono.value.trim())) {
+                telefono.parentElement.classList.add('has-error');
+                isValid = false;
+            } else {
+                telefono.parentElement.classList.remove('has-error');
+            }
+
+            return isValid;
+        }
+
+        // ===== ENVIAR FORMULARIO =====
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlerts();
+
+            if (!validateForm()) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Registrando...';
+
+            const formData = {
+                nombre: document.getElementById('nombre').value.trim(),
+                apellido: document.getElementById('apellido').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                pais: document.getElementById('pais').value
+            };
+
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('success', 'Usuario registrado exitosamente: ' + sanitizeInput(data.data.nombre) + ' ' + sanitizeInput(data.data.apellido));
+                    document.getElementById('registerForm').reset();
+                } else {
+                    const errorMsg = data.errors ? data.errors.join(', ') : data.message;
+                    showAlert('error', errorMsg);
+                }
+            } catch (error) {
+                showAlert('error', 'Error de conexión. Verifique su conexión a Internet.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Registrar Usuario';
+            }
+        });
+
+        // ===== CARGAR USUARIOS =====
+        async function loadUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            const emptyState = document.getElementById('empty-state');
+            const refreshBtn = document.querySelector('.refresh-btn');
+
+            refreshBtn.classList.add('spinning');
+
+            try {
+                const response = await fetch('/api/users');
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    tbody.innerHTML = data.data.map(user => `
+                        <tr>
+                            <td><span class="badge badge-id">#${user.id}</span></td>
+                            <td><strong>${sanitizeInput(user.nombre)} ${sanitizeInput(user.apellido)}</strong></td>
+                            <td class="email-cell">${sanitizeInput(user.email)}</td>
+                            <td>${user.telefono ? sanitizeInput(user.telefono) : '<span style="color: var(--gray-400)">—</span>'}</td>
+                            <td>${user.pais ? sanitizeInput(user.pais) : '<span style="color: var(--gray-400)">—</span>'}</td>
+                            <td class="date-cell">${user.fecha_registro || '—'}</td>
+                        </tr>
+                    `).join('');
+                    emptyState.classList.add('hidden');
+                    document.getElementById('user-count').textContent = data.count + ' usuario' + (data.count !== 1 ? 's' : '');
+                } else {
+                    tbody.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                    document.getElementById('user-count').textContent = '0 usuarios';
+                }
+            } catch (error) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.querySelector('p').textContent = 'Error al cargar usuarios';
+                emptyState.querySelector('small').textContent = 'Verifique la conexión al servidor';
+            } finally {
+                refreshBtn.classList.remove('spinning');
+            }
+        }
+
+        // ===== ALERTAS =====
+        function showAlert(type, message) {
+            hideAlerts();
+            const alert = document.getElementById(`alert-${type}`);
+            document.getElementById(`${type}-message`).textContent = message;
+            alert.classList.add('show');
+            setTimeout(() => alert.classList.remove('show'), 6000);
+        }
+
+        function hideAlerts() {
+            document.querySelectorAll('.alert').forEach(a => a.classList.remove('show'));
+        }
+
+        // Limpiar errores al escribir
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                input.parentElement.classList.remove('has-error');
+            });
+        });
+    </script>
+</body>
+</html>

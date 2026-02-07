@@ -1,0 +1,22 @@
+{
+  "name": "securefeedback-registration",
+  "version": "1.0.0",
+  "description": "SecureFeedback S.A. - Aplicación de registro seguro de usuarios",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["azure", "security", "waf", "owasp"],
+  "author": "SecureFeedback S.A.",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "helmet": "^8.1.0",
+    "mssql": "^12.2.0",
+    "xss-filters": "^1.2.7"
+  }
+}
