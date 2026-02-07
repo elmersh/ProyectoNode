@@ -12,7 +12,7 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const xssFilters = require('xss-filters');
-const { getPool, sql } = require('../db');
+const { sql, executeWithRetry } = require('../db');
 
 // ===== REGLAS DE VALIDACIÓN =====
 const validacionRegistro = [
@@ -74,18 +74,19 @@ router.post('/', validacionRegistro, async (req, res) => {
     const pais = req.body.pais ? xssFilters.inHTMLData(req.body.pais.trim()) : null;
 
     // Consulta parametrizada (previene SQL Injection)
-    const pool = await getPool();
-    const result = await pool.request()
-      .input('nombre', sql.NVarChar(100), nombre)
-      .input('apellido', sql.NVarChar(100), apellido)
-      .input('email', sql.NVarChar(255), email)
-      .input('telefono', sql.NVarChar(20), telefono)
-      .input('pais', sql.NVarChar(100), pais)
-      .query(`
-        INSERT INTO usuarios (nombre, apellido, email, telefono, pais)
-        VALUES (@nombre, @apellido, @email, @telefono, @pais);
-        SELECT SCOPE_IDENTITY() AS id;
-      `);
+    const result = await executeWithRetry(async (pool) => {
+      return await pool.request()
+        .input('nombre', sql.NVarChar(100), nombre)
+        .input('apellido', sql.NVarChar(100), apellido)
+        .input('email', sql.NVarChar(255), email)
+        .input('telefono', sql.NVarChar(20), telefono)
+        .input('pais', sql.NVarChar(100), pais)
+        .query(`
+          INSERT INTO usuarios (nombre, apellido, email, telefono, pais)
+          VALUES (@nombre, @apellido, @email, @telefono, @pais);
+          SELECT SCOPE_IDENTITY() AS id;
+        `);
+    });
 
     res.status(201).json({
       success: true,
@@ -119,16 +120,15 @@ router.post('/', validacionRegistro, async (req, res) => {
 // ===== GET /api/users - Listar usuarios registrados =====
 router.get('/', async (req, res) => {
   try {
-    const pool = await getPool();
-
-    // Consulta parametrizada con paginación
-    const result = await pool.request()
-      .query(`
-        SELECT id, nombre, apellido, email, telefono, pais,
-               FORMAT(fecha_registro, 'dd/MM/yyyy HH:mm') as fecha_registro
-        FROM usuarios
-        ORDER BY fecha_registro DESC
-      `);
+    const result = await executeWithRetry(async (pool) => {
+      return await pool.request()
+        .query(`
+          SELECT id, nombre, apellido, email, telefono, pais,
+                 FORMAT(fecha_registro, 'dd/MM/yyyy HH:mm') as fecha_registro
+          FROM usuarios
+          ORDER BY fecha_registro DESC
+        `);
+    });
 
     res.json({
       success: true,

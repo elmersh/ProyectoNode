@@ -56,4 +56,30 @@ async function getPool() {
   return pool;
 }
 
-module.exports = { getPool, sql };
+/**
+ * Ejecuta un query con reintentos para manejar Azure SQL serverless en pausa
+ * @param {Function} queryFn - Función async que ejecuta el query
+ * @param {number} maxRetries - Número máximo de reintentos (default: 3)
+ * @returns {Promise} - Resultado del query
+ */
+async function executeWithRetry(queryFn, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const currentPool = await getPool();
+      return await queryFn(currentPool);
+    } catch (err) {
+      console.log(`Intento ${i + 1}/${maxRetries} de query falló: ${err.message}`);
+      // Limpiar pool global si hay error de conexión
+      if (err.code === 'ESOCKET' || err.code === 'ECONNRESET' || err.message.includes('Connection lost')) {
+        pool = null;
+      }
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      } else {
+        throw err;
+      }
+    }
+  }
+}
+
+module.exports = { getPool, sql, executeWithRetry };
